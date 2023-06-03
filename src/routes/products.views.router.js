@@ -30,9 +30,18 @@ router.get("/", async (req, res) => {
     const data = await productModel.paginate(search, options)
     console.log(JSON.stringify(data, null, 2, '\t'));
 
-    const user = req.session.user
+    const user = req.user.user
 
-    res.render('products', {data, user})
+    const front_pagination = []
+    for (let index = 1; index <= data.totalPages; index++) {
+        front_pagination.push({
+            page: index,
+            active: index == data.page
+        })
+        
+    }
+
+    res.render('products', {data, user, front_pagination})
 })
 
 export default router
